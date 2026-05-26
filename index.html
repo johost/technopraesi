@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Musikschule: Elektronische Musik</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #080810;
+    --surface: #0f0f1c;
+    --card: #141428;
+    --border: #1e1e3a;
+    --cyan: #00e5ff;
+    --purple: #b94fff;
+    --pink: #ff3ca0;
+    --green: #39ff14;
+    --orange: #ff6d00;
+    --blue: #4fc3f7;
+    --yellow: #ffd60a;
+    --dim: #6060a0;
+    --text: #e8e8f8;
+    --text-muted: #8888bb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,8,16,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 52px;
+    overflow-x: auto;
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    white-space: nowrap;
+    margin-right: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--text); background: var(--border); }
+  .nav-btn.active { color: var(--bg); font-weight: 700; }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 3rem 2rem 6rem; max-width: 1100px; margin: 0 auto; }
+  .section.visible { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(185,79,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+  }
+  .genre-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+  .pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .pill:hover { opacity: 0.7; transform: scale(0.97); }
+
+  /* ── SECTION HEADER ── */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .section-title h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+  }
+  .accent-bar {
+    height: 3px;
+    width: 60px;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+  }
+  .section-intro {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 750px;
+  }
+
+  /* ── CONCEPT BOX ── */
+  .concept-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .concept-box::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .concept-box h3 {
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+  .concept-box p, .concept-box li {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+  .concept-box ul { padding-left: 1.25rem; }
+  .concept-box li { margin-bottom: 0.3rem; }
+  .concept-box strong { color: var(--text); }
+
+  /* ── VIDEO GRID ── */
+  .video-grid {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  .video-grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+  .video-grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .video-grid.cols-1 { grid-template-columns: 1fr; max-width: 700px; }
+
+  .video-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .video-card:hover { border-color: var(--dim); }
+
+  .video-header {
+    padding: 1rem 1.25rem 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .genre-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid;
+    white-space: nowrap;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+  .video-title {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .video-artist {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+  }
+
+  .yt-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background: #000;
+  }
+  .yt-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .listen-for {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .listen-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .listen-label::before {
+    content: '▶';
+    font-size: 0.5rem;
+  }
+  .listen-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .listen-item {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--surface);
+    border-radius: 6px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .video-note {
+    padding: 0 1.25rem 1rem;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── COMPARE TABLE ── */
+  .compare-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .compare-cell {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .compare-cell .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .compare-cell .value {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .compare-cell .value strong { color: var(--text); }
+
+  /* ── THEORY EXPLAINER ── */
+  .theory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .theory-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .theory-card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .theory-card h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .theory-card p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  .tl-dot {
+    position: absolute;
+    left: -1.6rem;
+    top: 0.35rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+  }
+  .tl-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+  }
+  .tl-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .tl-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── CHEAT SHEET ── */
+  .cheat-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .cheat-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .cheat-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+  }
+  .cheat-table td:first-child { color: var(--text); font-weight: 600; }
+  .cheat-table tr:hover td { background: var(--card); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section.visible { animation: fadeIn 0.35s ease; }
+
+  /* ── BLOCKQUOTE ── */
+  blockquote {
+    border-left: 3px solid var(--dim);
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  blockquote strong { color: var(--text); font-style: normal; }
+
+  @media (max-width: 600px) {
+    .video-grid.cols-2 { grid-template-columns: 1fr; }
+    .video-grid.cols-3 { grid-template-columns: 1fr; }
+    nav { padding: 0 1rem; }
+    .section { padding: 2rem 1rem 4rem; }
+    .hero { padding: 3rem 1rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">🎛 MUSIKSCHULE</div>
+  <button class="nav-btn" onclick="show('home')" style="--c:var(--cyan)">Intro</button>
+  <button class="nav-btn" onclick="show('basics')" style="--c:var(--yellow)">Theorie</button>
+  <button class="nav-btn" onclick="show('dnb')" style="--c:var(--cyan)">DnB</button>
+  <button class="nav-btn" onclick="show('dubstep')" style="--c:var(--purple)">Dubstep</button>
+  <button class="nav-btn" onclick="show('techno')" style="--c:var(--pink)">Techno</button>
+  <button class="nav-btn" onclick="show('house')" style="--c:var(--green)">House</button>
+  <button class="nav-btn" onclick="show('idm')" style="--c:var(--blue)">IDM & Electro</button>
+  <button class="nav-btn" onclick="show('trance')" style="--c:var(--orange)">Trance & EDM</button>
+  <button class="nav-btn" onclick="show('cheat')" style="--c:var(--text-muted)">Cheat Sheet</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ HOME -->
+<div id="home" class="section visible">
+  <div class="hero">
+    <div class="hero-label">MUSIKSCHULE — ELEKTRONISCHE MUSIK</div>
+    <h1>Wo kommen all diese<br>Genres her?</h1>
+    <p>Kein Vorwissen nötig. Wir hören rein, erklären was passiert — und warum Skrillex und Skream beide "Dubstep" sind, aber völlig verschiedene Musik machen.</p>
+    <div class="genre-pills">
+      <span class="pill" onclick="show('dnb')" style="color:var(--cyan);border-color:var(--cyan)">DnB</span>
+      <span class="pill" onclick="show('dubstep')" style="color:var(--purple);border-color:var(--purple)">Dubstep</span>
+      <span class="pill" onclick="show('techno')" style="color:var(--pink);border-color:var(--pink)">Techno</span>
+      <span class="pill" onclick="show('house')" style="color:var(--green);border-color:var(--green)">House</span>
+      <span class="pill" onclick="show('idm')" style="color:var(--blue);border-color:var(--blue)">IDM</span>
+      <span class="pill" onclick="show('trance')" style="color:var(--orange);border-color:var(--orange)">Trance</span>
+    </div>
+  </div>
+
+  <div class="timeline" style="margin-top:3rem">
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--cyan);background:var(--cyan)"></div>
+      <div class="tl-year">1970–80s — Die Wurzeln</div>
+      <div class="tl-title">Electro, Funk, Soul</div>
+      <div class="tl-desc">Kraftwerk + Roland TR-808 drum machine + Afrika Bambaataa = der genetische Code von allem was kommt. Soul und Gospel aus Chicago und Detroit legen den emotionalen Boden.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--green);background:var(--green)"></div>
+      <div class="tl-year">1984–1988 — Chicago & Detroit</div>
+      <div class="tl-title">House und Techno entstehen gleichzeitig</div>
+      <div class="tl-desc">House = Disco + Soul + 4/4 Kicks in Chicago-Clubs. Techno = kältere, industrielle, maschinelle Version aus Detroit. Beide parallel, kaum in Kontakt.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--orange);background:var(--orange)"></div>
+      <div class="tl-year">1990–1994 — UK Rave</div>
+      <div class="tl-title">Hardcore → Jungle → DnB</div>
+      <div class="tl-desc">Die UK-Szene nimmt alles und dreht es auf Maximum: schnellere Beats, tiefere Bässe, Sample-Collagen. Jungle bricht das Tempo und legt den Grundstein für Drum & Bass.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--purple);background:var(--purple)"></div>
+      <div class="tl-year">2002–2008 — London Underground</div>
+      <div class="tl-title">UK Garage → Dubstep (original)</div>
+      <div class="tl-desc">Aus dem UK Garage und Grime-Umfeld entsteht Dubstep: 140 BPM, schwerer Bass, viel Raum. Clubs: DMZ, FWD>>. Kaum jemand außerhalb Londons kennt es.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot" style="border-color:var(--pink);background:var(--pink)"></div>
+      <div class="tl-year">2010–2013 — Mainstreaming</div>
+      <div class="tl-title">Brostep, EDM, Festivalisierung</div>
+      <div class="tl-desc">Skrillex bringt Dubstep nach Amerika und transformiert es komplett. EDM wird zum Festivalphänomen. Die UK-Szene distanziert sich vom Begriff "Dubstep".</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ BASICS/THEORY -->
+<div id="basics" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--yellow)">🎓 Musikalische Grundbegriffe</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--yellow)"></div>
+  <p class="section-intro">Ohne diese Begriffe macht der Rest wenig Sinn. Kein Vorwissen nötig — wir erklären alles von Grund auf.</p>
+
+  <div class="theory-grid">
+    <div class="theory-card" style="border-color:rgba(0,229,255,0.3)">
+      <div class="icon">🥁</div>
+      <h4 style="color:var(--cyan)">BPM — Beats per Minute</h4>
+      <p>Tempo. Langsamer Hip-Hop: ~90 BPM. House: ~125 BPM. Techno: ~135 BPM. DnB: ~170 BPM. Je höher, desto schneller fühlt sich die Musik an — aber das Tempo allein bestimmt nicht das Genre.</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(57,255,20,0.3)">
+      <div class="icon">🎵</div>
+      <h4 style="color:var(--green)">4/4 — Four on the Floor</h4>
+      <p>Der Kick-Drum schlägt auf jeden der 4 Taktschläge: 1-2-3-4, 1-2-3-4. Das Grundprinzip von House und Techno. Gleichmäßig, treibend, hypnotisch.</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(255,60,160,0.3)">
+      <div class="icon">💥</div>
+      <h4 style="color:var(--pink)">Breakbeat</h4>
+      <p>Statt gleichmäßigem 4/4 ein synkopierter, "gebrochener" Rhythmus. Der Amen-Break ist das bekannteste Beispiel. Klingt wilder, unberechenbarer. Basis von DnB und frühem Jungle.</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(185,79,255,0.3)">
+      <div class="icon">🌊</div>
+      <h4 style="color:var(--purple)">Halfstep (Dubstep)</h4>
+      <p>Dubstep-Rhythmus: Der Kick kommt nicht auf jeden Beat, sondern der Snare-Akzent liegt ungewöhnlich auf dem 3. Beat (statt 2+4). Das erzeugt den "stolpernden", schweren Groove.</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(255,109,0,0.3)">
+      <div class="icon">🔊</div>
+      <h4 style="color:var(--orange)">Bassline & Sub-Bass</h4>
+      <p>Tieffrequenter Bass unter 80 Hz — auf guten Lautsprechern zu spüren, nicht nur zu hören. Der "Wobble-Bass" in Dubstep ist eine LFO-modulierte Bassline (LFO = periodische Frequenzveränderung).</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(79,195,247,0.3)">
+      <div class="icon">🔁</div>
+      <h4 style="color:var(--blue)">Loops & Repetition</h4>
+      <p>Elektronische Musik wiederholt Patterns absichtlich lang. Das ist kein Mangel an Ideen — es ist Technik: Repetition erzeugt Trance-Zustände und lässt kleine Veränderungen dramatisch wirken.</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(255,214,10,0.3)">
+      <div class="icon">⬆️</div>
+      <h4 style="color:var(--yellow)">Build-up & Drop</h4>
+      <p>Spannungsaufbau (Build-up): Energie steigern, Kick ausblenden, Filter öffnen. Drop: alles auf einmal zurück. Das EDM-Prinzip. Techno und House kennen das auch, aber subtiler.</p>
+    </div>
+    <div class="theory-card" style="border-color:rgba(57,255,20,0.3)">
+      <div class="icon">🎹</div>
+      <h4 style="color:var(--green)">Sampling</h4>
+      <p>Ausschnitte aus alten Tracks werden neu verwendet. Der Amen-Break ist ein 6-Sekunden-Drum-Sample, das tausende Songs definiert hat. Sampling ist keine Abkürzung — es ist ein Kompositionsmittel.</p>
+    </div>
+  </div>
+
+  <div class="concept-box" style="border-left-color:var(--yellow)">
+    <h3 style="color:var(--yellow)">💡 WARUM KLINGT TECHNO ANDERS ALS HOUSE?</h3>
+    <p>Beide nutzen 4/4-Kicks, ähnliche BPMs, ähnliche Instrumente. Der Unterschied liegt in der <strong>Emotion und den Quellen</strong>: House kommt aus Soul, Gospel, dem Körper — es ist warm, hat oft Gesang, Piano-Chords. Techno kommt aus einer industriellen, entfremdeten Detroit-Ästhetik — es ist kalt, maschinell, repetitiv. Gleiche Werkzeuge, komplett verschiedene Absichten.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ DnB -->
+<div id="dnb" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--cyan)">⚡ Drum & Bass</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--cyan)"></div>
+  <p class="section-intro">DnB ist der Sound von UK-Urbanität: schnelle Breaks, massiver Sub-Bass, alles gleichzeitig chaotisch und präzise. Um zu verstehen wo es herkommt, muss man den Amen-Break kennen.</p>
+
+  <div class="concept-box" style="border-left-color:var(--cyan); margin-bottom:2rem">
+    <h3 style="color:var(--cyan)">📖 DAS FUNDAMENT: BREAKBEATS</h3>
+    <ul>
+      <li><strong>~160–180 BPM</strong> — fast doppelt so schnell wie House</li>
+      <li>Kern: <strong>synkopierter Breakbeat</strong> (kein gleichmäßiges 4/4) + massiver Sub-Bass</li>
+      <li>Der Bass schlägt oft halb so schnell wie der Beat → rhythmische Spannung</li>
+      <li>Herkunft: UK Hardcore → Jungle (1992) → DnB (1994)</li>
+      <li>Schlüsseldifferenz zu Dubstep: DnB ist <em>schnell</em>, Dubstep ist <em>halb so schnell</em></li>
+    </ul>
+  </div>
+
+  <div class="video-grid cols-1">
+    <div class="video-card" style="border-color:rgba(0,229,255,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--yellow);border-color:var(--yellow)">PFLICHT</span>
+        <div>
+          <div class="video-title">Can I Get An Amen? — Der wichtigste 6-Sekunden-Loop der Musikgeschichte</div>
+          <div class="video-artist">Nate Harrison, 2004 · Dokumentation (18 min)</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/XPoxZW8JzzM" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WARUM DIESES VIDEO</div>
+        <div class="listen-items">
+          <span class="listen-item">Erklärt den Amen Break von Grund auf</span>
+          <span class="listen-item">Zeigt wie Sampling funktioniert</span>
+          <span class="listen-item">Geschichte von Jungle → DnB</span>
+          <span class="listen-item">Copyright-Diskussion ist wichtig</span>
+        </div>
+      </div>
+      <div class="video-note">Ein 6-Sekunden-Drum-Solo aus 1969, das tausende Songs definiert hat. Wenn du nur ein Video in dieser Präsentation schaust — dieses hier. Das Wichtigste: hör wie der Breakbeat sich von einem simplen 4/4-Kick unterscheidet.</div>
+    </div>
+  </div>
+
+  <div class="video-grid cols-2">
+    <div class="video-card" style="border-color:rgba(0,229,255,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--cyan);border-color:var(--cyan)">LIQUID DnB</span>
+        <div>
+          <div class="video-title">Inner City Life</div>
+          <div class="video-artist">Goldie, 1994 — Das emotionale Herzstück</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/mSWpqfcJ8Bw" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🥁 Amen Break — erkennst du ihn?</span>
+          <span class="listen-item">🎙️ Gesang schwebt über dem schnellen Beat</span>
+          <span class="listen-item">🌊 Sub-Bass unter allem — der emotionale Anker</span>
+          <span class="listen-item">📐 Breakbeat vs. Vocal-Melodie: zwei verschiedene Zeitgefühle gleichzeitig</span>
+        </div>
+      </div>
+      <div class="video-note">DnB kann auch schön sein. Das hier ist Jungle/DnB als Soulmusik — Diane Charlemagne's Stimme über dem schnellen Break. Goldies Debüt "Timeless" (1995) hat DnB als kunstform etabliert.</div>
+    </div>
+
+    <div class="video-card" style="border-color:rgba(185,79,255,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--purple);border-color:var(--purple)">NEUROFUNK</span>
+        <div>
+          <div class="video-title">Machine Gun</div>
+          <div class="video-artist">Noisia, 2010 — DnB auf extremem Niveau</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/yhvjZQYyRHg" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">⚡ ~175 BPM — extrem schnell</span>
+          <span class="listen-item">🔬 Reese-Bass: der tiefe, verzerrte Grundton</span>
+          <span class="listen-item">🖥️ Sci-Fi-Sounds, industrielle Textur</span>
+          <span class="listen-item">🎯 Hochpräzise Mix — trotz Chaos alles am richtigen Platz</span>
+        </div>
+      </div>
+      <div class="video-note">Neurofunk: die dunkelste, technischste DnB-Unterform. Noisia (Niederland) sind bekannt für ihren präzisen Sound-Design. Hier ist der Bass nicht melodisch — er ist eine Waffe.</div>
+    </div>
+  </div>
+
+  <blockquote>
+    <strong>DnB ↔ Dubstep Connection:</strong> Beide kommen aus der gleichen UK-Szene. Dubstep hat das DnB-Tempo halbiert (~170 → ~140 BPM) und den Rhythmus verändert. Viele Produzenten haben beide gemacht.
+  </blockquote>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ DUBSTEP -->
+<div id="dubstep" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--purple)">🌀 Dubstep — Drei Welten</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--purple)"></div>
+  <p class="section-intro">Das konfuseste Genre-Label: Skream, James Blake und Skrillex nennen sich alle "Dubstep" — aber kaum drei Künstler klingen unterschiedlicher. Hier sind die Unterschiede.</p>
+
+  <div class="concept-box" style="border-left-color:var(--purple)">
+    <h3 style="color:var(--purple)">📖 DAS HALFSTEP-PRINZIP</h3>
+    <p>Dubstep-Rhythmus: <strong>140 BPM</strong>, aber der Snare liegt auf dem 3. Beat (statt 2 und 4 wie üblich). Das nennt man "Halfstep" — das Gehirn erlebt die Musik halb so schnell wie sie tatsächlich ist. Dieser schwere, stolpernde Groove ist das einzige was alle Dubstep-Formen gemeinsam haben.</p>
+  </div>
+
+  <h3 style="margin-bottom:1.25rem;font-size:1.1rem;color:var(--text-muted)">⬛ Welt 1: Das Original — UK Dubstep</h3>
+  <div class="video-grid cols-1">
+    <div class="video-card" style="border-color:rgba(185,79,255,0.4)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--purple);border-color:var(--purple)">UK DUBSTEP</span>
+        <div>
+          <div class="video-title">Midnight Request Line</div>
+          <div class="video-artist">Skream, 2005 — Das definitive Original</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/vJGXRQ9vBoU" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🕳️ Viel Raum, viel Stille — Pausen sind Musik</span>
+          <span class="listen-item">🌑 Dub-Einfluss: Hall, Echo, Atmosphäre</span>
+          <span class="listen-item">🐘 Tiefer Sub-Bass: spürbar, nicht nur hörbar</span>
+          <span class="listen-item">⏱️ Halfstep-Rhythmus: der stolpernde Groove</span>
+          <span class="listen-item">❄️ Kein Gesang, kein Build-up, kein "Drop" — es läuft einfach</span>
+        </div>
+      </div>
+      <div class="video-note">Skream ist 17 als er das produziert. Kein Mainstream-Appeal, kein Radio — das lief in kleinen Londoner Clubs (DMZ, FWD>>). Der Dub-Einfluss kommt aus Jamaika: Reggae-Basslines, Hall als Instrument, Raum als Element.</div>
+    </div>
+  </div>
+
+  <h3 style="margin:2rem 0 1.25rem;font-size:1.1rem;color:var(--text-muted)">🎨 Welt 2: Post-Dubstep als Kunst — James Blake</h3>
+  <div class="video-grid cols-1">
+    <div class="video-card" style="border-color:rgba(79,195,247,0.4)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--blue);border-color:var(--blue)">POST-DUBSTEP</span>
+        <div>
+          <div class="video-title">CMYK</div>
+          <div class="video-artist">James Blake, 2010 — Dubstep als Material, nicht als Genre</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/Ix0Kj-tpeUU" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🎤 Vocals als Instrument: verzerrt, zerstückelt, geschichtet</span>
+          <span class="listen-item">💔 Sample aus R&B — Kelis-Ausschnitt, aber kaum erkennbar</span>
+          <span class="listen-item">🏗️ Struktur bricht auf: kein normales Verse/Chorus</span>
+          <span class="listen-item">🎹 Piano und Dubstep-Rhythmus zusammen — passt eigentlich nicht, macht es trotzdem</span>
+          <span class="listen-item">⛓️ Emotionaler Inhalt: traurig, fragil — nicht tanzbar</span>
+        </div>
+      </div>
+      <div class="video-note">James Blake studiert am Goldsmiths College und nimmt Dubstep-Strukturen als Ausgangsmaterial für etwas Eigenes. Das ist kein Club-Musik — eher Konzertmusik mit elektronischen Mitteln. Warp-Records-Ästhetik trifft Soul.</div>
+    </div>
+  </div>
+
+  <h3 style="margin:2rem 0 1.25rem;font-size:1.1rem;color:var(--text-muted)">💥 Welt 3: Brostep — Skrillex</h3>
+  <div class="video-grid cols-1">
+    <div class="video-card" style="border-color:rgba(255,60,160,0.4)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--pink);border-color:var(--pink)">BROSTEP</span>
+        <div>
+          <div class="video-title">Scary Monsters and Nice Sprites</div>
+          <div class="video-artist">Skrillex, 2010 — Geburt des Brostep</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/WSeNSzJ2-Jw" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🔊 Wobble-Bass: LFO-moduliert, "wob wob wob"</span>
+          <span class="listen-item">⬆️ Klassischer EDM-Build-up vor dem Drop</span>
+          <span class="listen-item">💣 Der "Drop": Moment wo alles zusammenbricht</span>
+          <span class="listen-item">🎸 Metal-Einflüsse: Aggression, Distortion</span>
+          <span class="listen-item">🏟️ Für riesige Räume gemacht — Festival-Skala</span>
+        </div>
+      </div>
+      <div class="video-note">Skrillex ist ein ehemaliger Post-Hardcore-Sänger (From First to Last). Interessant: "Scary Monsters" entstand in Noisias Studio (DnB-Produzenten aus NL) — die zeigten ihm FM8. Das Ergebnis hat die Genres gespalten. Die UK-Szene empfindet das nicht als "echten" Dubstep.</div>
+    </div>
+  </div>
+
+  <div class="compare-row" style="margin-top:2rem">
+    <div class="compare-cell">
+      <div class="label" style="color:var(--purple)">GEMEINSAMKEIT</div>
+      <div class="value">Alle drei: ~140 BPM. Alle drei: Sub-Bass im Zentrum. Alle drei nennen sich "Dubstep".</div>
+    </div>
+    <div class="compare-cell">
+      <div class="label" style="color:var(--pink)">UNTERSCHIED</div>
+      <div class="value">Skream: <strong>räumlich, dunkel, Dub</strong>. Blake: <strong>Kunst, Emotion, Dekonstruktion</strong>. Skrillex: <strong>Energie, Drop, Festival</strong>.</div>
+    </div>
+    <div class="compare-cell">
+      <div class="label" style="color:var(--blue)">FAUSTREGEL</div>
+      <div class="value">UK Dubstep: hypnotisch, viel Stille. Post-Dubstep: fragmentiert, emotional. Brostep: laut, Drops, Wobble.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ TECHNO -->
+<div id="techno" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--pink)">🔩 Techno — & die Kalkbrenner-Frage</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--pink)"></div>
+  <p class="section-intro">Detroit, 1985. Drei Freunde (Belleville Three: Derrick May, Kevin Saunderson, Juan Atkins) entwickeln Techno als Antwort auf die wirtschaftliche Krise der Stadt. Maschinell, kalt, futuristisch — und trotzdem emotional.</p>
+
+  <div class="concept-box" style="border-left-color:var(--pink)">
+    <h3 style="color:var(--pink)">📖 TECHNO ≠ MINIMALISTISCH (ABER OFT)</h3>
+    <p>Techno muss nicht minimalistisch sein — aber <strong>Reduktion auf das Wesentliche</strong> ist zentral. Das Ziel: Repetition als Trance-Mittel. Der Kick-Drum auf jeden Schlag (4/4) bei ~130–150 BPM. Was als "Techno" gilt, ist tatsächlich eine Wertungsfrage: wenn es warm und melodisch wird → House-Grenze. Wenn es kalt und maschinell bleibt → Techno.</p>
+  </div>
+
+  <div class="video-grid cols-2">
+    <div class="video-card" style="border-color:rgba(255,60,160,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--pink);border-color:var(--pink)">DETROIT TECHNO</span>
+        <div>
+          <div class="video-title">The Bells</div>
+          <div class="video-artist">Jeff Mills, 1996 — Techno Purismus</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/1OHHhq9xDxo" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🔔 Ein einziges Motiv — die "Bells" wiederholen sich minimal variiert</span>
+          <span class="listen-item">⚙️ 4/4 Kick: gleichmäßig, maschinell, unerbittlich</span>
+          <span class="listen-item">🔄 Trance durch Repetition: nach 5 Min. bist du drin</span>
+          <span class="listen-item">❄️ Emotionslos? Nein — emotional durch Entzug, nicht durch Geste</span>
+        </div>
+      </div>
+      <div class="video-note">Jeff Mills ist einer der wichtigsten Detroit-Technopioniere. "The Bells" ist minimalistisch, aber nicht "nichts": die Melodie-Linie ist emotional. Techno kann berühren — nur anders als House.</div>
+    </div>
+
+    <div class="video-card" style="border-color:rgba(79,195,247,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--blue);border-color:var(--blue)">MELODIC TECHNO</span>
+        <div>
+          <div class="video-title">Sky and Sand</div>
+          <div class="video-artist">Paul & Fritz Kalkbrenner, 2008 — Berlin Sound</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/JMUNv3E81Ds" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🎹 Melodische Synthesizer über Techno-Kicks</span>
+          <span class="listen-item">🌅 "Warm" für Techno — ein Hauch House</span>
+          <span class="listen-item">🎤 Fritz Kalkbrenners Gesang: Soul-Einfluss</span>
+          <span class="listen-item">🏙️ "Berlin Sound": Berghain-Ästhetik trifft Emotion</span>
+          <span class="listen-item">⚖️ Techno-Struktur mit Deep-House-Wärme</span>
+        </div>
+      </div>
+      <div class="video-note">Genre-Etiketten: Melodic Techno / Dub Techno / Minimal mit melodischer Ader. Das Label "Techno" stimmt technisch — aber es ist warmer als Jeff Mills. Längster Chartsong deutschen Ursprungs aller Zeiten (129 Wochen).</div>
+    </div>
+  </div>
+
+  <div class="concept-box" style="border-left-color:var(--green); margin-top:1.5rem">
+    <h3 style="color:var(--green)">📖 WANN WIRD TECHNO ZU HOUSE?</h3>
+    <ul>
+      <li><strong>Techno → House</strong>: wenn Piano-Akkorde oder Gospel-Elemente dominant werden</li>
+      <li><strong>Techno → House</strong>: wenn es "warm" und soulful wird</li>
+      <li><strong>Tech-House</strong>: lebt exakt in der Mitte — Techno-Kicks, House-Groove</li>
+      <li><strong>Kalkbrenner</strong>: offiziell Melodic Techno/Dub Techno — aber die Grenze ist fließend</li>
+      <li>Faustregel: Würde es in einem Berghain-Backroom laufen? → Techno. Würde es in Ibiza auf der Terrasse laufen? → House</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ HOUSE -->
+<div id="house" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--green)">🏠 House — Show Me Love vs. Huerco S</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--green)"></div>
+  <p class="section-intro">House ist die weiteste Familie. Chicago 1984: Frankie Knuckles in der Warehouse. Der Name kommt vom Club. Aber was "Show Me Love" und Huerco S gemeinsam haben ist... eigentlich fast nichts außer dem Grundrhythmus.</p>
+
+  <div class="video-grid cols-2">
+    <div class="video-card" style="border-color:rgba(57,255,20,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--green);border-color:var(--green)">SOULFUL HOUSE</span>
+        <div>
+          <div class="video-title">Show Me Love</div>
+          <div class="video-artist">Robin S, 1990 — Das Hausklassiker-Prinzip</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/bU5HPjelOPw" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🕊️ Gospel-Stimme — das ist das Soul-Erbe</span>
+          <span class="listen-item">🎹 Piano-Chords: warm, treibend</span>
+          <span class="listen-item">🥁 4/4 Kick: gleichmäßig, ~125 BPM</span>
+          <span class="listen-item">⛪ House als Gemeinschafts-Erfahrung: Dancefloor-Musik</span>
+          <span class="listen-item">🔥 Energie kommt aus der Stimme, nicht aus Effekten</span>
+        </div>
+      </div>
+      <div class="video-note">Produziert von StoneBridge. Chicago-Einfluss kombiniert mit NY-Club-Ästhetik. Das Piano-Motiv und die Stimme — das ist House in reinster Form: körperlich, emotional, kollektiv.</div>
+    </div>
+
+    <div class="video-card" style="border-color:rgba(79,195,247,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--blue);border-color:var(--blue)">DEEP / AMBIENT HOUSE</span>
+        <div>
+          <div class="video-title">For Those of You Who Have Never (And Also Those Who Have)</div>
+          <div class="video-artist">Huerco S, 2016</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/mMnLN1GYRSY" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🌫️ Strukturen lösen sich auf — kein Verse/Chorus</span>
+          <span class="listen-item">💤 Hypnagoge Ästhetik: zwischen Schlafen und Wachen</span>
+          <span class="listen-item">📻 Lo-Fi Textur: wie ein alter, verzerrter Kassettenmitschnitt</span>
+          <span class="listen-item">🚶 Kein Dancefloor-Fokus — eher Zimmer/Kopfhörer</span>
+          <span class="listen-item">🌊 House-Rhythmus als atmosphärisches Element, nicht als Drive</span>
+        </div>
+      </div>
+      <div class="video-note">Huerco S (Brian Leeds) macht House als meditative, fragmentierte Erfahrung. Verwandt mit William Basinski und Drone-Musik. Der 4/4-Kick ist da, aber das ist nicht der Punkt. "Field Studies" (2016) ist sein Meisterwerk.</div>
+    </div>
+  </div>
+
+  <div class="concept-box" style="border-left-color:var(--green);margin-top:1.5rem">
+    <h3 style="color:var(--green)">📖 DAS HOUSE-SPEKTRUM</h3>
+    <ul>
+      <li><strong>Soulful/Gospel House</strong> (Robin S, Frankie Knuckles): Stimme, Piano, Emotionalität, ~118–128 BPM</li>
+      <li><strong>Deep House</strong> (Larry Heard, Four Tet): introvertierter, jazziger, weniger Gesang</li>
+      <li><strong>Tech-House</strong> (Jamie Jones, Fisher): Techno-Kicks, House-Grooves — heute oft sehr kommerziell</li>
+      <li><strong>Ambient/Slow House</strong> (Huerco S): House als Textur, Meditation, Dekonstruktion</li>
+      <li><strong>Afro House / Disco House</strong>: afroamerikanische und afrikanische Einflüsse, starke Percussion</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ IDM / ELECTRO -->
+<div id="idm" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--blue)">🔭 IDM, Electronica & Electro</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--blue)"></div>
+  <p class="section-intro">Die cerebralen Genres: Musik die mehr im Kopf als im Körper wirkt — oder in beiden gleichzeitig, aber auf komplexere Weise. Plus Electro, das oft mit Electro-Pop verwechselt wird.</p>
+
+  <div class="concept-box" style="border-left-color:var(--blue)">
+    <h3 style="color:var(--blue)">📖 IDM — "Intelligent Dance Music"</h3>
+    <p>Der Name ist problematisch (impliziert anderes Tanzen sei "dumm") — aber er ist geblieben. Entstanden ~1992 rund um Warp Records (UK). Hauptunterschied: <strong>rhythmische Komplexität und Unregelmäßigkeit</strong>. Statt 4/4 oder einfachem Breakbeat: asymmetrische Patterns, unerwartete Polyrhythmen. Musik die du analysieren kannst, nicht nur fühlen.</p>
+  </div>
+
+  <div class="video-grid cols-2">
+    <div class="video-card" style="border-color:rgba(79,195,247,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--blue);border-color:var(--blue)">IDM / ELECTRONICA</span>
+        <div>
+          <div class="video-title">Windowlicker</div>
+          <div class="video-artist">Aphex Twin, 1999 — IDM für den Mainstream?</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/UBS4Gi1y_nc" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🎤 Vocal-Processing: Stimme bis zur Unkenntlichkeit verformt</span>
+          <span class="listen-item">💃 Groove der funktioniert — aber der Rhythmus ist seltsam</span>
+          <span class="listen-item">🔬 Mikro-Details: hör mit Kopfhörern was im Hintergrund passiert</span>
+          <span class="listen-item">😂 Humor: Das Video ist eine Hip-Hop-Parodie (Chris Cunningham)</span>
+          <span class="listen-item">🌀 R&B-Struktur + IDM-Textur = Post-alles</span>
+        </div>
+      </div>
+      <div class="video-note">Richard D. James (Aphex Twin) gilt als einer der einflussreichsten Produzenten der Musikgeschichte. Windowlicker ist zugänglich für einen Aphex-Track — aber hör mal in "Avril 14th" oder "Analogue Bubblebath" rein wenn du was Extremeres willst.</div>
+    </div>
+
+    <div class="video-card" style="border-color:rgba(255,109,0,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--orange);border-color:var(--orange)">ELECTRO</span>
+        <div>
+          <div class="video-title">Planet Rock</div>
+          <div class="video-artist">Afrika Bambaataa & the Soulsonic Force, 1982 — Der Urknall</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/9lDCYjb8RHk" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🤖 Roland TR-808 Drum Machine: der charakteristische "Klatsch"</span>
+          <span class="listen-item">🎛️ Kraftwerk-Sample: "Trans-Europe Express" Melodie</span>
+          <span class="listen-item">🌍 Hip-Hop + Kraftwerk-Ästhetik = Electro</span>
+          <span class="listen-item">❄️ Kalt, maschinell, aber mit Groove</span>
+          <span class="listen-item">📜 Historisch: dieser Track hat Electro, Hip-Hop UND Techno beeinflusst</span>
+        </div>
+      </div>
+      <div class="video-note">Electro ≠ Electro-Pop (Kraftwerk, Depeche Mode). "Electro" als Tanzgenre meint den spezifischen 808-Drum-Sound + Synth-Melodien. Heute lebt Electro in der Underground-Szene weiter (DJ Stingray, Dj Stingray, DVS1).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ TRANCE & EDM -->
+<div id="trance" class="section">
+  <div class="section-title">
+    <h2 style="color:var(--orange)">✨ Trance, EDM & die Scooter-Frage</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--orange)"></div>
+  <p class="section-intro">Sind die bekanntesten elektronischen Tracks Trance? Kurze Antwort: Darude ja, Scooter nein, Paul van Dyk ja, Daft Punk nein. Hier ist warum.</p>
+
+  <div class="concept-box" style="border-left-color:var(--orange)">
+    <h3 style="color:var(--orange)">📖 TRANCE — DEFINITION</h3>
+    <p>Techno-Derivat, ~1990 Frankfurt. Erkennungsmerkmale: <strong>138–145 BPM</strong>, melodische Synthesizer-Läufe, typische 8-Takt-Build-ups, emotionale Drops, langer Aufbau. Ziel: euphorischer Trance-Zustand. Untergenres: Progressive Trance (tiefgründiger, langsamer), Uplifting Trance (melodisch, emotional), Psytrance (psychedelisch, ~145 BPM), Eurotrance (kommerziell, simpel).</p>
+  </div>
+
+  <div class="video-grid cols-2">
+    <div class="video-card" style="border-color:rgba(255,109,0,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--orange);border-color:var(--orange)">EUROTRANCE</span>
+        <div>
+          <div class="video-title">Sandstorm</div>
+          <div class="video-artist">Darude, 1999 — Das bekannteste Trance-Stück der Welt</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/y6120QOlsfU" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">⬆️ Typischer Trance-Build-up: 8-Takt-Strukturen</span>
+          <span class="listen-item">🎹 Das Riff: eingängig, repetitiv, melodisch</span>
+          <span class="listen-item">💥 Der Drop: Energie-Entladung nach Build-up</span>
+          <span class="listen-item">🏃 ~138 BPM — Eurotrance-Tempo</span>
+          <span class="listen-item">✅ Ja, das ist Trance — Eurotrance/Hard Trance Untergenre</span>
+        </div>
+      </div>
+      <div class="video-note">Darude ist Finne, nicht Deutscher. Sandstorm ist Eurotrance — die zugänglichste, kommerziellste Form. Das Riff ist so bekannt dass "What is this song? — Sandstorm" zum Meme wurde.</div>
+    </div>
+
+    <div class="video-card" style="border-color:rgba(255,214,10,0.3)">
+      <div class="video-header">
+        <span class="genre-tag" style="color:var(--yellow);border-color:var(--yellow)">PROGRESSIVE TRANCE</span>
+        <div>
+          <div class="video-title">For an Angel</div>
+          <div class="video-artist">Paul van Dyk, 1994 — Berliner Trance-Legende</div>
+        </div>
+      </div>
+      <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/G8CpECQ6VoE" allowfullscreen loading="lazy"></iframe></div>
+      <div class="listen-for">
+        <div class="listen-label">WAS HÖREN?</div>
+        <div class="listen-items">
+          <span class="listen-item">🎶 Progressive Struktur: langsam aufgebaut, nicht sofort zum Drop</span>
+          <span class="listen-item">🕊️ Emotionaler Kern: die Melodie trägt die ganze Energie</span>
+          <span class="listen-item">🏙️ Berliner Einfluss: weniger kommerziell als Darude</span>
+          <span class="listen-item">⏰ Länger, geduldiger als Eurotrance</span>
+        </div>
+      </div>
+      <div class="video-note">Paul van Dyk ist Ost-Berliner, spielte im Tresor. Progressive Trance ist subtiler als Eurotrance — die Energie baut sich langsamer auf. "For an Angel" ist eines der einflussreichsten Trance-Stücke.</div>
+    </div>
+  </div>
+
+  <div class="concept-box" style="border-left-color:var(--pink);margin-top:1.5rem">
+    <h3 style="color:var(--pink)">❓ IST SCOOTER TRANCE?</h3>
+    <p>Nein. Scooter (Hamburg, ab 1993) ist <strong>Gabber-beeinflusster Hardcore-Techno</strong> mit Pop-Gesang und Samples. Das BPM (~150+), die aggressiven Synths und die "Oi Oi Oi"-Ästhetik kommen aus der Gabber/Happy Hardcore-Ecke — nicht aus Trance. Aber: Scooter, Darude und Paul van Dyk stehen alle unter dem EDM-Dach. <strong>EDM</strong> = US-amerikanischer Marketing-Begriff ab ~2010 für alle kommerziell erfolgreiche elektronische Tanzmusik.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ CHEAT SHEET -->
+<div id="cheat" class="section">
+  <div class="section-title">
+    <h2>📋 Cheat Sheet</h2>
+  </div>
+  <div class="accent-bar" style="background:var(--dim)"></div>
+  <p class="section-intro">Alle Genres auf einen Blick.</p>
+
+  <div style="overflow-x:auto">
+    <table class="cheat-table">
+      <thead>
+        <tr>
+          <th>GENRE</th>
+          <th>BPM</th>
+          <th>RHYTHMUS</th>
+          <th>FEELING</th>
+          <th>HÖREN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="color:var(--cyan)">DnB</td><td>160–180</td><td>Breakbeat</td><td>Energie, Bassdruck, UK-Urbanität</td><td>Goldie, Noisia, Pendulum</td></tr>
+        <tr><td style="color:var(--purple)">UK Dubstep</td><td>138–142</td><td>Halfstep</td><td>Düster, räumlich, Dub-Einfluss</td><td>Skream, Benga, Digital Mystikz</td></tr>
+        <tr><td style="color:var(--blue)">Post-Dubstep</td><td>variabel</td><td>fragmentiert</td><td>Kunst, Emotion, Dekonstruktion</td><td>James Blake, Mount Kimbie</td></tr>
+        <tr><td style="color:var(--pink)">Brostep</td><td>140</td><td>Halfstep + Drop</td><td>Laut, Wobble, Festival</td><td>Skrillex, Excision, Barely Alive</td></tr>
+        <tr><td style="color:var(--pink)">Techno</td><td>130–150</td><td>4/4 Kick</td><td>Maschinell, hypnotisch, kalt</td><td>Jeff Mills, Surgeon, Bicep</td></tr>
+        <tr><td style="color:var(--blue)">Melodic Techno</td><td>128–136</td><td>4/4 Kick</td><td>Emotional + maschinell</td><td>Kalkbrenner, Moderat, Tale Of Us</td></tr>
+        <tr><td style="color:var(--green)">Soulful House</td><td>118–128</td><td>4/4 Kick</td><td>Warm, Gospel, körperlich</td><td>Robin S, Frankie Knuckles, Larry Heard</td></tr>
+        <tr><td style="color:var(--green)">Deep House</td><td>120–126</td><td>4/4 Kick</td><td>Introvertiert, jazzig</td><td>Four Tet, Floating Points, Huerco S</td></tr>
+        <tr><td style="color:var(--green)">Tech-House</td><td>126–132</td><td>4/4 Kick</td><td>Techno-Kicks + House-Groove</td><td>Jamie Jones, Fisher, Camelphat</td></tr>
+        <tr><td style="color:var(--orange)">Trance</td><td>138–145</td><td>4/4 + Build-up</td><td>Melodisch, euphorisch, emotional</td><td>Paul van Dyk, Armin van Buuren</td></tr>
+        <tr><td style="color:var(--orange)">Eurotrance</td><td>136–142</td><td>4/4 + Drop</td><td>Kommerziell, eingängig, euphorisch</td><td>Darude, ATB, Alice Deejay</td></tr>
+        <tr><td style="color:var(--orange)">Gabber/Hardcore</td><td>150–200</td><td>4/4 extrem</td><td>Aggressiv, distorted Kick</td><td>Scooter (Pop-Version), Rotterdam Terror Corps</td></tr>
+        <tr><td style="color:var(--blue)">IDM</td><td>variabel</td><td>komplex/asymmetrisch</td><td>Cerebral, experimentell</td><td>Aphex Twin, Autechre, Boards of Canada</td></tr>
+        <tr><td style="color:var(--orange)">Electro</td><td>125–135</td><td>TR-808 Patterns</td><td>Maschinell, kalt, funky</td><td>Dj Stingray, Drexciya, Curses</td></tr>
+        <tr><td style="color:#ff6584">EDM</td><td>128–140</td><td>4/4 + Drop</td><td>Kommerziell, Drops, Festival</td><td>Avicii, Tiësto, Martin Garrix</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const sections = ['home','basics','dnb','dubstep','techno','house','idm','trance','cheat'];
+  const colors = {
+    home: '#00e5ff', basics: '#ffd60a', dnb: '#00e5ff', dubstep: '#b94fff',
+    techno: '#ff3ca0', house: '#39ff14', idm: '#4fc3f7', trance: '#ff6d00', cheat: '#6060a0'
+  };
+
+  function show(id) {
+    sections.forEach(s => {
+      const el = document.getElementById(s);
+      const btn = document.querySelector(`button[onclick="show('${s}')"]`);
+      el.classList.remove('visible');
+      if (btn) { btn.classList.remove('active'); btn.style.background = ''; btn.style.color = ''; }
+    });
+    document.getElementById(id).classList.add('visible');
+    const btn = document.querySelector(`button[onclick="show('${id}')"]`);
+    if (btn) {
+      btn.classList.add('active');
+      btn.style.background = colors[id] || '#fff';
+      btn.style.color = '#080810';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Set initial active state
+  show('home');
+</script>
+</body>
+</html>
